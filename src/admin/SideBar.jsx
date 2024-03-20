@@ -56,6 +56,7 @@ function SideBar({ isOpen }) {
             fontSize="large"
           />
         }
+        linkTo="/consumers"
         isActive={Number(index) === 2}
         index="2"
         setIndex={setIndex}
@@ -70,6 +71,7 @@ function SideBar({ isOpen }) {
             fontSize="large"
           />
         }
+        linkTo="/structures"
         isActive={Number(index) === 3}
         index="3"
         setIndex={setIndex}
@@ -87,6 +89,7 @@ function SideBar({ isOpen }) {
         isActive={Number(index) === 4}
         index="4"
         setIndex={setIndex}
+        linkTo="/roles"
       >
         Roles
       </Lien>
@@ -101,6 +104,7 @@ function SideBar({ isOpen }) {
         isActive={index === 5}
         index="5"
         setIndex={setIndex}
+        linkTo="/permissions"
       >
         Permissions
       </Lien>

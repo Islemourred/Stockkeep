@@ -1,5 +1,7 @@
+import Datatable from "./DataTable.jsx";
+
 function Users() {
-  return <div>users</div>;
+  return Datatable();
 }
 
 export default Users;

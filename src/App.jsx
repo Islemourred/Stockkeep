@@ -1,8 +1,12 @@
+import "./index.css";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./admin/Layout";
 import Main from "./admin/dashboard/Main";
 import Users from "./admin/users/Users";
-import "./index.css";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import Consumers from "./admin/consumers/Consumers";
+import Structures from "./admin/structures/Structures";
+import Permissions from "./admin/permissions/Permissions";
+import Roles from "./admin/roles/Roles";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +19,22 @@ const router = createBrowserRouter([
       {
         path: "/users",
         element: <Users />,
+      },
+      {
+        path: "/consumers",
+        element: <Consumers />,
+      },
+      {
+        path: "/structures",
+        element: <Structures />,
+      },
+      {
+        path: "/roles",
+        element: <Roles />,
+      },
+      {
+        path: "/permissions",
+        element: <Permissions />,
       },
     ],
   },
