@@ -119,6 +119,7 @@ function SideBar({ isOpen }) {
         isActive={Number(index) === 6}
         index="6"
         setIndex={setIndex}
+        linkTo="/Settings"
       >
         Settings
       </Lien>

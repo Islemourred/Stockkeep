@@ -7,6 +7,7 @@ import Consumers from "./admin/consumers/Consumers";
 import Structures from "./admin/structures/Structures";
 import Permissions from "./admin/permissions/Permissions";
 import Roles from "./admin/roles/Roles";
+import Settings from "./admin/settings/settings";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: "/permissions",
         element: <Permissions />,
+      },
+      {
+        path: "/settings",
+        element: <Settings />,
       },
     ],
   },
