@@ -21,24 +21,24 @@ const TABLE_HEAD = [
 const TABLE_ROWS = [
   // hedo bilama ma linkina m3a lback
   {
-    name: "Meriem",
-    lastName: "Mokhtari",
-    email: "hm.mokhtari@esi-sba.dz",
+    name: "Fetitah ",
+    lastName: "Rachida",
+    email: "r.fetitah@esi-sba.dz",
     role: "stockkeeper",
     activity: true,
   },
   {
-    name: "Islem",
-    lastName: "Ourred",
-    email: "ic.ourred@esi-sba.dz",
-    role: "stockkeeper",
+    name: "Aced",
+    lastName: "Mohammed",
+    email: "mr.aced@esi-sba.dz",
+    role: "CP respo",
     activity: false,
   },
   {
-    name: "abderrahmane",
-    lastName: "guerrinik",
-    email: "ac.gurrinik@esi-sba.dz",
-    role: "stockkeeper",
+    name: "Benslimane",
+    lastName: "Mohammed",
+    email: "s.benslimane@esi-sba.dz",
+    role: "Director",
     activity: true,
   },
 ];
