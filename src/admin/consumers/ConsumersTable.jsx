@@ -12,7 +12,7 @@ const TABLE_HEAD = [
   "First Name",
   "Last Name",
   "Email",
-  "Role",
+  "Structure",
   "Activity",
   "More",
 ];
@@ -20,24 +20,24 @@ const TABLE_HEAD = [
 const TABLE_ROWS = [
   // hedo bilama ma linkina m3a lback
   {
-    name: "Meriem",
-    lastName: "Mokhtari",
-    email: "hm.mokhtari@esi-sba.dz",
-    role: "agent service achat",
+    name: "Fetitah ",
+    lastName: "Rachida",
+    email: "r.fetitah@esi-sba.dz",
+    role: "CP",
     activity: true,
   },
   {
-    name: "Islem",
-    lastName: "Ourred",
-    email: "ic.ourred@esi-sba.dz",
-    role: "directeur",
+    name: "Aced",
+    lastName: "Mohammed",
+    email: "mr.aced@esi-sba.dz",
+    role: "CS",
     activity: false,
   },
   {
-    name: "abderrahmane",
-    lastName: "guerrinik",
-    email: "ac.gurrinik@esi-sba.dz",
-    role: "stockkeeper",
+    name: "Benslimane",
+    lastName: "Mohammed",
+    email: "s.benslimane@esi-sba.dz",
+    role: "DG",
     activity: true,
   },
 ];
@@ -73,14 +73,14 @@ function Users() {
   };
   return (
     <main
-      className="table-container m-4 h-full"
+      className="table-container m-4 h-full rounded-[11px]"
       style={{
         borderRadius: "20px !important",
         backgroundColor: "#ffffff",
       }}
     >
       <Card
-        className="h-full w-full overflow-auto"
+        className="h-full w-full overflow-auto rounded-[11px]"
         style={{ borderRadius: "20px !important" }}
       >
         <div className="ml-8 mr-12 mt-4 mb-8 flex items-center justify-between gap-8">
@@ -93,7 +93,7 @@ function Users() {
               fontWeight: 600,
             }}
           >
-            Users
+            Consumers
           </Typography>
           <div className="flex items-center">
             <div

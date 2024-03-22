@@ -14,11 +14,35 @@ const TABLE_ROWS = [
   // hedo bilama ma linkina m3a lback
   {
     id: "1",
-    name: "Admin",
+    name: "Add/ Modify/ Delete/ View a chapter",
   },
   {
     id: "2",
-    name: "Stockkeeper",
+    name: "Add/ Modify/ Delete/ View an article",
+  },
+  {
+    id: "3",
+    name: "Assign/ Unasign a role to account",
+  },
+  {
+    id: "4",
+    name: "Add/ Modify/ Delete/ Consult a spplier",
+  },
+  {
+    id: "5",
+    name: "Add/ Modify/ Delete an account",
+  },
+  {
+    id: "6",
+    name: "Add/ Modify/ Delete/ View/ Print an external purshase order",
+  },
+  {
+    id: "7",
+    name: "Add/ Modify/ Delete/ View a product",
+  },
+  {
+    id: "2",
+    name: "View statistics",
   },
 ];
 
@@ -55,14 +79,14 @@ function PermissionsTable() {
 
   return (
     <main
-      className="table-container m-4 h-full"
+      className="table-container m-4 h-full rounded-[11px]"
       style={{
         borderRadius: "20px !important",
         backgroundColor: "#ffffff",
       }}
     >
       <Card
-        className="h-full w-full overflow-auto"
+        className="h-full w-full overflow-auto rounded-[11px]"
         style={{ borderRadius: "20px !important" }}
       >
         <div className="ml-8 mr-12 mt-4 mb-8 flex items-center justify-between gap-8">

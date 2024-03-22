@@ -29,6 +29,30 @@ const TABLE_ROWS = [
     name: "Cycle prepa",
     responsable: "aced",
   },
+  {
+    id: "4",
+    abreviation: "CS",
+    name: "Second Cycle Department",
+    responsable: "Amrane Abdelkader",
+  },
+  {
+    id: "5",
+    abreviation: "CP",
+    name: "Department of Education and Diploma",
+    responsable: "Amar Bensaber Djamel",
+  },
+  {
+    id: "6",
+    abreviation: "CP",
+    name: "Externel relations Department",
+    responsable: "Bedjaoui Mohamed",
+  },
+  {
+    id: "7",
+    abreviation: "CP",
+    name: "Department of Doctoral Training",
+    responsable: "Malki Mimoun",
+  },
 ];
 
 function StructuresTable() {
@@ -64,17 +88,17 @@ function StructuresTable() {
 
   return (
     <main
-      className="table-container m-4 h-full"
+      className="table-container m-4 h-full rounded-[11px]"
       style={{
         borderRadius: "20px !important",
         backgroundColor: "#ffffff",
       }}
     >
       <Card
-        className="h-full w-full overflow-auto"
+        className="h-full w-full overflow-auto rounded-[11px]"
         style={{ borderRadius: "20px !important" }}
       >
-        <div className="ml-8 mr-12 mt-4 mb-8 flex items-center justify-between gap-8">
+        <div className="ml-8 mr-12 mt-4 mb-8 flex items-center justify-between gap-8 ">
           <Typography
             color="blue-gray"
             style={{

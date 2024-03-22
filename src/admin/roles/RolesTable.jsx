@@ -18,7 +18,23 @@ const TABLE_ROWS = [
   },
   {
     id: "2",
+    name: " Purshasing department agen",
+  },
+  {
+    id: "3",
     name: "Stockkeeper",
+  },
+  {
+    id: "4",
+    name: "Consumer",
+  },
+  {
+    id: "5",
+    name: "Responsable for the reporting structure",
+  },
+  {
+    id: "6",
+    name: "Director",
   },
 ];
 
@@ -55,14 +71,14 @@ function RolesTbale() {
 
   return (
     <main
-      className="table-container m-4 h-full"
+      className="table-container m-4 h-full rounded-[11px]"
       style={{
         borderRadius: "20px !important",
         backgroundColor: "#ffffff",
       }}
     >
       <Card
-        className="h-full w-full overflow-auto"
+        className="h-full w-full overflow-auto  rounded-[11px]"
         style={{ borderRadius: "20px !important" }}
       >
         <div className="ml-8 mr-12 mt-4 mb-8 flex items-center justify-between gap-8">

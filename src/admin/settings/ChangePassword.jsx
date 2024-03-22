@@ -5,7 +5,6 @@ import SubmitButtonGreen from "../../ui/SubmitButtonGreen";
 import DialogContent from "@mui/material/DialogContent";
 import Input from "../../ui/Input";
 
-
 function ChangePassword({ open, handleClose, children }) {
   /*const handleClickOpen = () => {
     setOpen(true);
@@ -28,7 +27,7 @@ function ChangePassword({ open, handleClose, children }) {
           <form onSubmit={(e) => e.preventDefault}>
             <Input type="password" placeholder="Current password" />
             <Input type="password" placeholder="New password" />
-            <Input type="password" placeholder="Confirm password" />            
+            <Input type="password" placeholder="Confirm password" />
           </form>
         </DialogContent>
         <DialogActions>
