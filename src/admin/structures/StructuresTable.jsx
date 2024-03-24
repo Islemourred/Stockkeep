@@ -6,6 +6,7 @@ import Filters from "../../assets/Filters.png";
 import { useState } from "react";
 import CreateStructure from "./CreateStructure";
 import ConfirmDelete from "../../ui/ConfirmDelete";
+import { useSelector } from "react-redux";
 
 const TABLE_HEAD = ["ID", "Abreviation", "Name", "Responsable", "More"];
 
@@ -56,6 +57,8 @@ const TABLE_ROWS = [
 ];
 
 function StructuresTable() {
+  const admin = useSelector((state) => state.admin);
+  const searchQuery = admin.searchQuery;
   /*const handleModify = (index) => {
     // dk nzid fonctionnalite ta3ha hna ki nzid hedok les fenetres
     console.log("Modify clicked for index", index);
@@ -196,7 +199,21 @@ function StructuresTable() {
             </tr>
           </thead>
           <tbody>
-            {TABLE_ROWS.map(({ id, abreviation, name, responsable }, index) => {
+            {TABLE_ROWS.filter(
+              (consumer) =>
+                consumer.id
+                  .toLowerCase()
+                  .startsWith(searchQuery.toLowerCase()) ||
+                consumer.abreviation
+                  .toLowerCase()
+                  .startsWith(searchQuery.toLowerCase()) ||
+                consumer.name
+                  .toLowerCase()
+                  .startsWith(searchQuery.toLowerCase()) ||
+                consumer.responsable
+                  .toLowerCase()
+                  .startsWith(searchQuery.toLowerCase())
+            ).map(({ id, abreviation, name, responsable }, index) => {
               const isLast = index === TABLE_ROWS.length - 1;
               const classes = isLast
                 ? "p-4"

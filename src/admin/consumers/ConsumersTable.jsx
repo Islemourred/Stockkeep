@@ -7,6 +7,7 @@ import Filters from "../../assets/Filters.png";
 import CreateConsumer from "./CreateConsumer";
 import { useState } from "react";
 import ConfirmDelete from "../../ui/ConfirmDelete";
+import { useSelector } from "react-redux";
 
 const TABLE_HEAD = [
   "First Name",
@@ -43,6 +44,8 @@ const TABLE_ROWS = [
 ];
 
 function Users() {
+  const admin = useSelector((state) => state.admin);
+  const searchQuery = admin.searchQuery;
   /*const handleModify = (index) => {
     // dk nzid fonctionnalite ta3ha hna ki nzid hedok les fenetres
     console.log("Modify clicked for index", index);
@@ -181,113 +184,125 @@ function Users() {
             </tr>
           </thead>
           <tbody>
-            {TABLE_ROWS.map(
-              ({ name, lastName, email, role, activity }, index) => {
-                const isLast = index === TABLE_ROWS.length - 1;
-                const classes = isLast
-                  ? "p-4"
-                  : "p-4 border-b border-blue-gray-50";
+            {TABLE_ROWS.filter(
+              (consumer) =>
+                consumer.name
+                  .toLowerCase()
+                  .startsWith(searchQuery.toLowerCase()) ||
+                consumer.lastName
+                  .toLowerCase()
+                  .startsWith(searchQuery.toLowerCase()) ||
+                consumer.email
+                  .toLowerCase()
+                  .startsWith(searchQuery.toLowerCase()) ||
+                consumer.role
+                  .toLowerCase()
+                  .startsWith(searchQuery.toLowerCase())
+            ).map(({ name, lastName, email, role, activity }, index) => {
+              const isLast = index === TABLE_ROWS.length - 1;
+              const classes = isLast
+                ? "p-4"
+                : "p-4 border-b border-blue-gray-50";
 
-                return (
-                  <tr key={name}>
-                    <td className={`${classes} w-[160px]`}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        style={{
-                          fontFamily: "Poppins",
-                          fontWeight: 500,
-                          color: "#48505E",
-                        }}
+              return (
+                <tr key={name}>
+                  <td className={`${classes} w-[160px]`}>
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      style={{
+                        fontFamily: "Poppins",
+                        fontWeight: 500,
+                        color: "#48505E",
+                      }}
+                    >
+                      {name}
+                    </Typography>
+                  </td>
+                  <td className={`${classes} w-[160px]`}>
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                      style={{
+                        fontFamily: "Poppins",
+                        fontWeight: 500,
+                        color: "#48505E",
+                      }}
+                    >
+                      {lastName}
+                    </Typography>
+                  </td>
+                  <td className={`${classes} w-[200px],mr-2`}>
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                      style={{
+                        fontFamily: "Poppins",
+                        fontWeight: 500,
+                        color: "#48505E",
+                      }}
+                    >
+                      {email}
+                    </Typography>
+                  </td>
+                  <td className={`${classes} w-[170px]`}>
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                      style={{
+                        fontFamily: "Poppins",
+                        fontWeight: 500,
+                        color: "#48505E",
+                      }}
+                    >
+                      {role}
+                    </Typography>
+                  </td>
+                  <td className={`${classes} `}>
+                    <MyToggle enabled={activity} />
+                  </td>
+                  <td className={classes}>
+                    <div className="flex justify-start">
+                      <button
+                        className="bg-white border border-blue-500 rounded-[6px] w-10 h-10 flex items-center justify-center mr-[1px]"
+                        style={{ borderColor: "#D0D3D9" }}
                       >
-                        {name}
-                      </Typography>
-                    </td>
-                    <td className={`${classes} w-[160px]`}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                        style={{
-                          fontFamily: "Poppins",
-                          fontWeight: 500,
-                          color: "#48505E",
-                        }}
+                        <img
+                          src={modifyIcon}
+                          alt="Modify"
+                          className="h-5 w-5"
+                        />
+                      </button>
+
+                      <ConfirmDelete
+                        open={openD}
+                        handleClose={handleCloseD}
+                        setOpen={setOpenD}
+                        concern="consumer"
                       >
-                        {lastName}
-                      </Typography>
-                    </td>
-                    <td className={`${classes} w-[200px],mr-2`}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                        style={{
-                          fontFamily: "Poppins",
-                          fontWeight: 500,
-                          color: "#48505E",
-                        }}
-                      >
-                        {email}
-                      </Typography>
-                    </td>
-                    <td className={`${classes} w-[170px]`}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                        style={{
-                          fontFamily: "Poppins",
-                          fontWeight: 500,
-                          color: "#48505E",
-                        }}
-                      >
-                        {role}
-                      </Typography>
-                    </td>
-                    <td className={`${classes} `}>
-                      <MyToggle enabled={activity} />
-                    </td>
-                    <td className={classes}>
-                      <div className="flex justify-start">
                         <button
-                          className="bg-white border border-blue-500 rounded-[6px] w-10 h-10 flex items-center justify-center mr-[1px]"
-                          style={{ borderColor: "#D0D3D9" }}
+                          className="bg-white border border-blue-500 rounded-[6px] w-10 h-10 flex items-center justify-center "
+                          style={{
+                            borderColor: "#D0D3D9",
+                            marginLeft: "3px",
+                          }}
+                          onClick={handleClickOpenD}
                         >
                           <img
-                            src={modifyIcon}
-                            alt="Modify"
+                            src={deleteIcon}
+                            alt="Delete"
                             className="h-5 w-5"
                           />
                         </button>
-
-                        <ConfirmDelete
-                          open={openD}
-                          handleClose={handleCloseD}
-                          setOpen={setOpenD}
-                          concern="consumer"
-                        >
-                          <button
-                            className="bg-white border border-blue-500 rounded-[6px] w-10 h-10 flex items-center justify-center "
-                            style={{
-                              borderColor: "#D0D3D9",
-                              marginLeft: "3px",
-                            }}
-                            onClick={handleClickOpenD}
-                          >
-                            <img
-                              src={deleteIcon}
-                              alt="Delete"
-                              className="h-5 w-5"
-                            />
-                          </button>
-                        </ConfirmDelete>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              }
-            )}
+                      </ConfirmDelete>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </Card>

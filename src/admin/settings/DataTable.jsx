@@ -48,11 +48,11 @@ function DataTable() {
 
   return (
     <div
-      className="table-container m-4 h-full"
+      className="table-container m-4 h-full rounded-[11px]"
       style={{ borderRadius: "20px !important", backgroundColor: "#ffffff" }}
     >
       <Card
-        className="h-full w-full overflow-scroll"
+        className="h-full w-full overflow-scroll rounded-[11px]"
         style={{ borderRadius: "20px !important" }}
       >
         <div className="ml-8 mr-12  mb-[3.5rem] mt-12 flex items-center justify-between gap-8">

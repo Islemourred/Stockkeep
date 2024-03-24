@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-
-const store = configureStore({});
-
+import adminReducer from "./AdminSlice";
+const store = configureStore({
+  reducer: { admin: adminReducer },
+});
 export default store;

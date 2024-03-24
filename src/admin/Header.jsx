@@ -2,7 +2,7 @@ import SearchBar from "../ui/SearchBar";
 import Welcome from "./Welcome";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 
-function Header({ isOpen, setIsOpen }) {
+function Header({ isOpen, setIsOpen, search }) {
   return (
     <header
       className="pt-11 px-10 flex items-center justify-between  h-[fit-content] mb-12 max-[770px]:pl-
@@ -15,7 +15,7 @@ function Header({ isOpen, setIsOpen }) {
           fontSize="large"
           className="mr-10 max-[375px]:mr-1"
         />
-        <SearchBar />
+        {search && <SearchBar />}
       </div>
     </header>
   );

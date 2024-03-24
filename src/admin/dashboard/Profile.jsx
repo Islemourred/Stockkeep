@@ -1,5 +1,4 @@
 import profile from "../../assets/photo_profile.svg";
-
 function Profile() {
   return (
     <div className="bg-white py-10 px-32 rounded-3xl flex flex-col items-center gap-3">
@@ -8,6 +7,7 @@ function Profile() {
         alt=""
         className="rounded-[50%] max-h-[12rem] max-w-[12rem]"
       />
+
       <h2 className="text-[#303841] font-semibold text-[1.6rem] text-center">
         Ourred Charaf Eddine
       </h2>

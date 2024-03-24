@@ -7,6 +7,7 @@ import Filters from "../../assets/Filters.png";
 import { useState } from "react";
 import CreateRole from "./CreateRole";
 import ConfirmDelete from "../../ui/ConfirmDelete";
+import { useSelector } from "react-redux";
 
 const TABLE_HEAD = ["ID", "Name", "More"];
 
@@ -39,6 +40,8 @@ const TABLE_ROWS = [
 ];
 
 function RolesTbale() {
+  const admin = useSelector((state) => state.admin);
+  const searchQuery = admin.searchQuery;
   /*const handleModify = (index) => {
     // dk nzid fonctionnalite ta3ha hna ki nzid hedok les fenetres
     console.log("Modify clicked for index", index);
@@ -184,7 +187,13 @@ function RolesTbale() {
             </tr>
           </thead>
           <tbody>
-            {TABLE_ROWS.map(({ id, name }, index) => {
+            {TABLE_ROWS.filter(
+              (role) =>
+                role.id.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
+                role.permission
+                  .toLowerCase()
+                  .startsWith(searchQuery.toLowerCase())
+            ).map(({ id, name }, index) => {
               const isLast = index === TABLE_ROWS.length - 1;
               const classes = isLast
                 ? "p-4"

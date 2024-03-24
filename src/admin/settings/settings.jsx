@@ -1,7 +1,7 @@
 import Datatable from "./DataTable.jsx";
 
-function settings() {
+function Settings() {
   return Datatable();
 }
 
-export default settings;
+export default Settings;

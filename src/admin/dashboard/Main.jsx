@@ -26,7 +26,7 @@ const refreshToken =
 const config = {
   headers: {
     Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzExMTIzNDUyLCJpYXQiOjE3MTExMTYyNTIsImp0aSI6ImVmNTVmNTBlNmVlMTQ1NjA5NTBjNzU0NTdkNjRiYjIyIiwidXNlcl9pZCI6NH0.WZwYoUFVl0azwEQZG1EQfLDzbLiXwtqPutGLifHqmAM",
+      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzExMTUzNDQ4LCJpYXQiOjE3MTExNDYyNDgsImp0aSI6IjJjZmRiZTE3ZTRhNTQ2ZjhhNWJkZTRhY2Y2ZTBkYzEwIiwidXNlcl9pZCI6NX0.2h4I1_ovlr7DGJ3bFfKH3kHrfH6f85fBpolw9jPS-4E",
   },
 };
 
