@@ -1,7 +1,7 @@
 import SideBar from "../SideBar";
 import Header from "../Header";
 import { useState } from "react";
-import Settings from "./Settings";
+import Settings from "./settings";
 
 function SettingsPage() {
   const [isOpen, setIsOpen] = useState(false);

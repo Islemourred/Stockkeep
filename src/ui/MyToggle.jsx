@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Switch } from '@headlessui/react';
 
-function MyToggle({ enabled }) {
-  const [isEnabled, setIsEnabled] = useState(enabled);
-
+function MyToggle({ enabled, onToggle }) {
   const handleChange = () => {
-    setIsEnabled(!isEnabled);
+    // Call the onToggle function passed from the parent component
+    // to update the user's activity status
+    onToggle(!enabled);
   };
 
   return (
     <Switch
-      checked={isEnabled}
+      checked={enabled}
       onChange={handleChange}
       className={`${
-        isEnabled ? 'bg-customGreen' : 'bg-gray-200'
+        enabled ? 'bg-customGreen' : 'bg-gray-200'
       } relative inline-flex h-[22px] w-[50px] items-center rounded-full`}
     >
       <span className="sr-only">Toggle activity</span>
       <span
         className={`${
-          isEnabled ? 'translate-x-14' : 'translate-x-1'
+          enabled ? 'translate-x-14' : 'translate-x-1'
         } inline-block h-5 w-5 transform rounded-full bg-white transition`}
       />
     </Switch>

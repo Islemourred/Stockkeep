@@ -8,7 +8,7 @@ import Structures from "./admin/structures/Structures";
 import Permissions from "./admin/permissions/Permissions";
 import Roles from "./admin/roles/Roles";
 import Dashboard from "./admin/dashboard/Dashboard";
-import store from "./admin/store";
+import store from "./admin/Store";
 import SettingsPage from "./admin/settings/SettingsPage";
 const router = createBrowserRouter([
   {
