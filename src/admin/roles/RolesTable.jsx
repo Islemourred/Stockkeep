@@ -190,9 +190,7 @@ function RolesTbale() {
             {TABLE_ROWS.filter(
               (role) =>
                 role.id.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
-                role.permission
-                  .toLowerCase()
-                  .startsWith(searchQuery.toLowerCase())
+                role.name.toLowerCase().startsWith(searchQuery.toLowerCase())
             ).map(({ id, name }, index) => {
               const isLast = index === TABLE_ROWS.length - 1;
               const classes = isLast

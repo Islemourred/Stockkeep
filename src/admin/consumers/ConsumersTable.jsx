@@ -43,7 +43,7 @@ const TABLE_ROWS = [
   },
 ];
 
-function Users() {
+function ConsumersTable() {
   const admin = useSelector((state) => state.admin);
   const searchQuery = admin.searchQuery;
   /*const handleModify = (index) => {
@@ -310,4 +310,4 @@ function Users() {
   );
 }
 
-export default Users;
+export default ConsumersTable;

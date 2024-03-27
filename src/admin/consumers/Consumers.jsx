@@ -1,7 +1,7 @@
 import ConsumersTable from "./ConsumersTable";
 
-function Users() {
+function Consumers() {
   return ConsumersTable();
 }
 
-export default Users;
+export default Consumers;

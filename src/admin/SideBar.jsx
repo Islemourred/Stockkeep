@@ -10,8 +10,12 @@ import HubOutlinedIcon from "@mui/icons-material/HubOutlined";
 import AccountTreeOutlinedIcon from "@mui/icons-material/AccountTreeOutlined";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 
-function SideBar({ isOpen }) {
-  const [index, setIndex] = useState(0);
+function SideBar({ isOpen, initialIndex }) {
+  const [index, setIndex] = useState(initialIndex);
+
+  const handleLinkClick = (clickedIndex) => {
+    setIndex(clickedIndex);
+  };
 
   return (
     <aside
@@ -22,14 +26,13 @@ function SideBar({ isOpen }) {
       <Lien
         Icon={
           <DashboardIcon
-            color={`${Number(index) === 0 ? "primary" : "disabled"}`}
+            color={index === 0 ? "primary" : "disabled"}
             fontSize="large"
           />
         }
-        isActive={Number(index) === 0}
+        isActive={index === 0}
         linkTo="/"
-        index="0"
-        setIndex={setIndex}
+        onClick={() => handleLinkClick(0)}
       >
         Dashboard
       </Lien>
@@ -37,14 +40,13 @@ function SideBar({ isOpen }) {
       <Lien
         Icon={
           <GroupIcon
-            color={`${Number(index) === 1 ? "primary" : "disabled"}`}
+            color={index === 1 ? "primary" : "disabled"}
             fontSize="large"
           />
         }
-        isActive={Number(index) === 1}
+        isActive={index === 1}
         linkTo="/users"
-        index="1"
-        setIndex={setIndex}
+        onClick={() => handleLinkClick(1)}
       >
         Users
       </Lien>
@@ -52,14 +54,13 @@ function SideBar({ isOpen }) {
       <Lien
         Icon={
           <LocalGroceryStoreOutlinedIcon
-            color={`${Number(index) === 2 ? "primary" : "disabled"}`}
+            color={index === 2 ? "primary" : "disabled"}
             fontSize="large"
           />
         }
+        isActive={index === 2}
         linkTo="/consumers"
-        isActive={Number(index) === 2}
-        index="2"
-        setIndex={setIndex}
+        onClick={() => handleLinkClick(2)}
       >
         Consumers
       </Lien>
@@ -67,14 +68,14 @@ function SideBar({ isOpen }) {
       <Lien
         Icon={
           <AccountTreeOutlinedIcon
-            color={`${Number(index) === 3 ? "primary" : "disabled"}`}
+            color={index === 3 ? "primary" : "disabled"}
             fontSize="large"
           />
         }
+        isActive={index === 3}
         linkTo="/structures"
-        isActive={Number(index) === 3}
-        index="3"
-        setIndex={setIndex}
+        index={3}
+        onClick={() => handleLinkClick(3)}
       >
         Structures
       </Lien>
@@ -82,14 +83,13 @@ function SideBar({ isOpen }) {
       <Lien
         Icon={
           <HubOutlinedIcon
-            color={`${Number(index) === 4 ? "primary" : "disabled"}`}
+            color={index === 4 ? "primary" : "disabled"}
             fontSize="large"
           />
         }
-        isActive={Number(index) === 4}
-        index="4"
-        setIndex={setIndex}
+        isActive={index === 4}
         linkTo="/roles"
+        onClick={() => handleLinkClick(4)}
       >
         Roles
       </Lien>
@@ -97,14 +97,13 @@ function SideBar({ isOpen }) {
       <Lien
         Icon={
           <VerifiedOutlinedIcon
-            color={`${Number(index) === 5 ? "primary" : "disabled"}`}
+            color={index === 5 ? "primary" : "disabled"}
             fontSize="large"
           />
         }
         isActive={index === 5}
-        index="5"
-        setIndex={setIndex}
         linkTo="/permissions"
+        onClick={() => handleLinkClick(5)}
       >
         Permissions
       </Lien>
@@ -112,31 +111,30 @@ function SideBar({ isOpen }) {
       <Lien
         Icon={
           <SettingsOutlinedIcon
-            color={`${Number(index) === 6 ? "primary" : "disabled"}`}
+            color={index === 6 ? "primary" : "disabled"}
             fontSize="large"
           />
         }
-        isActive={Number(index) === 6}
-        index="6"
-        setIndex={setIndex}
-        linkTo="/Settings"
+        isActive={index === 6}
+        linkTo="/settings"
+        onClick={() => handleLinkClick(6)}
       >
         Settings
       </Lien>
 
       <div
         className={`flex items-center ${
-          Number(index) === 7 ? "border-r-[#2185D5] border-r-4" : ""
+          index === 7 ? "border-r-[#2185D5] border-r-4" : ""
         }  pl-2 cursor-pointer absolute bottom-5`}
       >
         <ExitToAppOutlinedIcon
-          color={`${Number(index) === 7 ? "primary" : "disabled"}`}
+          color={index === 7 ? "primary" : "disabled"}
           fontSize="large"
         />
         <span
           className={`font-poppins text-[1.6rem] ${
-            Number(index) === 7 ? "text-[#303841]" : "text-[#888]"
-          } ml-3 ${Number(index) === 7 ? "font-bold" : "font-medium"} `}
+            index === 7 ? "text-[#303841]" : "text-[#888]"
+          } ml-3 ${index === 7 ? "font-bold" : "font-medium"}`}
         >
           Log out
         </span>

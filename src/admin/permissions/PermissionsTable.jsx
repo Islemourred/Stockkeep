@@ -42,7 +42,7 @@ const TABLE_ROWS = [
     name: "Add/ Modify/ Delete/ View a product",
   },
   {
-    id: "2",
+    id: "8",
     name: "View statistics",
   },
 ];
