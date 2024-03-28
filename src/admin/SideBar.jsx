@@ -20,7 +20,7 @@ function SideBar({ isOpen, initialIndex }) {
   return (
     <aside
       className={`w-[18%] h-screen z-[2] bg-white bottom-0 pt-10  max-[770px]:absolute max-[770px]:w-[35%] 
-     ${!isOpen ? "hidden" : ""} md:block`}
+     ${!isOpen && "hidden"} md:block`}
     >
       <Logo />
       <Lien

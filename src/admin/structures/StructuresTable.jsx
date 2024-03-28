@@ -3,73 +3,42 @@ import { UserPlusIcon } from "@heroicons/react/24/solid";
 import modifyIcon from "../../assets/modifyIcon.png";
 import deleteIcon from "../../assets/deleteIcon.png";
 import Filters from "../../assets/Filters.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CreateStructure from "./CreateStructure";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { modifyStructures } from "../AdminSlice";
+import axiosInstance from "../../Services/AxiosInstance";
 
-const TABLE_HEAD = ["ID", "Abreviation", "Name", "Responsable", "More"];
-
-const TABLE_ROWS = [
-  // hedo bilama ma linkina m3a lback
-  {
-    id: "1",
-    abreviation: "DG",
-    name: "General direction",
-    responsable: "aced",
-  },
-  {
-    id: "2",
-    abreviation: "SG",
-    name: "General secreteriat",
-    responsable: "bensaber",
-  },
-  {
-    id: "3",
-    abreviation: "CP",
-    name: "Cycle prepa",
-    responsable: "aced",
-  },
-  {
-    id: "4",
-    abreviation: "CS",
-    name: "Second Cycle Department",
-    responsable: "Amrane Abdelkader",
-  },
-  {
-    id: "5",
-    abreviation: "CP",
-    name: "Department of Education and Diploma",
-    responsable: "Amar Bensaber Djamel",
-  },
-  {
-    id: "6",
-    abreviation: "CP",
-    name: "Externel relations Department",
-    responsable: "Bedjaoui Mohamed",
-  },
-  {
-    id: "7",
-    abreviation: "CP",
-    name: "Department of Doctoral Training",
-    responsable: "Malki Mimoun",
-  },
+const TABLE_HEAD = [
+  { name: "ID", width: "160px" },
+  { name: "Abreviation", width: "160px" },
+  { name: "Name", width: "160px" },
+  { name: "Responsible", width: "200px" },
+  { name: "More", width: "170px", isLast: true },
 ];
 
 function StructuresTable() {
-  const admin = useSelector((state) => state.admin);
-  const searchQuery = admin.searchQuery;
-  /*const handleModify = (index) => {
-    // dk nzid fonctionnalite ta3ha hna ki nzid hedok les fenetres
-    console.log("Modify clicked for index", index);
-  };
-
-  const handleDelete = (index) => {
-    // hna tani
-    console.log("Delete clicked for index", index);
-  };*/
-
+  const { searchQuery, structures } = useSelector((state) => state.admin);
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const [openD, setOpenD] = useState(false);
+
+  useEffect(() => {
+    async function fetchStructures() {
+      try {
+        const response = await axiosInstance.get(
+          "http://127.0.0.1:8000/structure/listcreate/"
+        );
+        dispatch(modifyStructures(response.data));
+      } catch (error) {
+        console.error("Error fetching structure data:", error);
+      }
+    }
+
+    fetchStructures();
+  }, [dispatch]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -78,8 +47,6 @@ function StructuresTable() {
   const handleClose = () => {
     setOpen(false);
   };
-
-  const [openD, setOpenD] = useState(false);
 
   const handleClickOpenD = () => {
     setOpenD(true);
@@ -92,10 +59,7 @@ function StructuresTable() {
   return (
     <main
       className="table-container m-4 h-full rounded-[11px]"
-      style={{
-        borderRadius: "20px !important",
-        backgroundColor: "#ffffff",
-      }}
+      style={{ borderRadius: "20px !important", backgroundColor: "#ffffff" }}
     >
       <Card
         className="h-full w-full overflow-auto rounded-[11px]"
@@ -117,7 +81,6 @@ function StructuresTable() {
             <div
               style={{
                 backgroundColor: "#FFFFFF",
-
                 borderRadius: "10px",
                 padding: "8px",
                 marginLeft: "8px",
@@ -126,10 +89,7 @@ function StructuresTable() {
               }}
             >
               <div
-                style={{
-                  borderRadius: "10px",
-                  border: "1px solid #D0D3D9",
-                }}
+                style={{ borderRadius: "10px", border: "1px solid #D0D3D9" }}
               >
                 <Button
                   className="flex items-center gap-3 p-[8px]"
@@ -148,7 +108,6 @@ function StructuresTable() {
               style={{
                 backgroundColor: "#2185D5",
                 borderRadius: "10px",
-
                 marginLeft: "8px",
                 display: "flex",
                 alignItems: "center",
@@ -179,49 +138,44 @@ function StructuresTable() {
           className="w-full ml-6 min-w-max table-auto text-left"
           style={{ fontSize: "14px", fontFamily: "Poppins", fontWeight: 100 }}
         >
-          <thead>
+          <thead className="relative z-[2]">
             <tr>
               {TABLE_HEAD.map((head) => (
                 <th
                   key={head}
-                  className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
+                  className={`border-b border-blue-gray-100 bg-blue-gray-50 p-4 sticky top-0 ${
+                    head.width ? `w-[${head.width}]` : ""
+                  } ${head.isLast ? "text-right pr-32" : ""} bg-slate-100`}
                 >
                   <Typography
                     variant="small"
                     color="blue-gray"
                     className="font-normal leading-none opacity-70"
-                    style={{ fontFamily: "Poppins", fontWeight: 500 }}
+                    style={{ fontFamily: "Poppins", fontWeight: 600 }}
                   >
-                    {head}
+                    {head.name}
                   </Typography>
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {TABLE_ROWS.filter(
-              (consumer) =>
-                consumer.id
-                  .toLowerCase()
-                  .startsWith(searchQuery.toLowerCase()) ||
-                consumer.abreviation
-                  .toLowerCase()
-                  .startsWith(searchQuery.toLowerCase()) ||
-                consumer.name
-                  .toLowerCase()
-                  .startsWith(searchQuery.toLowerCase()) ||
-                consumer.responsable
-                  .toLowerCase()
-                  .startsWith(searchQuery.toLowerCase())
-            ).map(({ id, abreviation, name, responsable }, index) => {
-              const isLast = index === TABLE_ROWS.length - 1;
-              const classes = isLast
-                ? "p-4"
-                : "p-4 border-b border-blue-gray-50";
-
-              return (
-                <tr key={name}>
-                  <td className={`${classes} w-[160px]`}>
+            {structures
+              .filter(
+                (structure) =>
+                  structure.abbreviation
+                    .toLowerCase()
+                    .startsWith(searchQuery.toLowerCase()) ||
+                  structure.responsible
+                    .toLowerCase()
+                    .startsWith(searchQuery.toLowerCase()) ||
+                  structure.name
+                    .toLowerCase()
+                    .startsWith(searchQuery.toLowerCase())
+              )
+              .map((structure) => (
+                <tr key={structure.id}>
+                  <td className={`p-4`}>
                     <Typography
                       variant="small"
                       color="blue-gray"
@@ -231,10 +185,10 @@ function StructuresTable() {
                         color: "#48505E",
                       }}
                     >
-                      {id}
+                      {structure.id}
                     </Typography>
                   </td>
-                  <td className={`${classes} w-[160px]`}>
+                  <td className={`p-4`}>
                     <Typography
                       variant="small"
                       color="blue-gray"
@@ -245,10 +199,10 @@ function StructuresTable() {
                         color: "#48505E",
                       }}
                     >
-                      {abreviation}
+                      {structure.abbreviation}
                     </Typography>
                   </td>
-                  <td className={`${classes} w-[200px],mr-2`}>
+                  <td className={`p-4`}>
                     <Typography
                       variant="small"
                       color="blue-gray"
@@ -259,10 +213,10 @@ function StructuresTable() {
                         color: "#48505E",
                       }}
                     >
-                      {name}
+                      {structure.name}
                     </Typography>
                   </td>
-                  <td className={`${classes} w-[200px],mr-2`}>
+                  <td className={`p-4`}>
                     <Typography
                       variant="small"
                       color="blue-gray"
@@ -273,11 +227,11 @@ function StructuresTable() {
                         color: "#48505E",
                       }}
                     >
-                      {responsable}
+                      {structure.responsible}
                     </Typography>
                   </td>
-                  <td className={classes}>
-                    <div className="flex justify-start">
+                  <td className={"p-4 pr-28"}>
+                    <div className="flex justify-end">
                       <button
                         className="bg-white border border-blue-500 rounded-[6px] w-10 h-10 flex items-center justify-center mr-[1px]"
                         style={{ borderColor: "#D0D3D9" }}
@@ -312,8 +266,7 @@ function StructuresTable() {
                     </div>
                   </td>
                 </tr>
-              );
-            })}
+              ))}
           </tbody>
         </table>
       </Card>

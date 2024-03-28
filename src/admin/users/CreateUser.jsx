@@ -8,6 +8,9 @@ import { useFormik } from "formik";
 import axiosInstance from "../../Services/AxiosInstance";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { modifyUsers } from "../AdminSlice";
 
 let roles = [];
 function CreateUser({ open, handleClose, setOpen, children }) {
@@ -19,6 +22,9 @@ function CreateUser({ open, handleClose, setOpen, children }) {
       roles = res.data;
     });
   }, []);
+  const admin = useSelector((state) => state.admin);
+  const dispatch = useDispatch();
+  const users = admin.users;
 
   const formik = useFormik({
     initialValues: {
@@ -98,6 +104,20 @@ function CreateUser({ open, handleClose, setOpen, children }) {
           toast.success("User created successfully", {
             className: "font-poppins text-[1.3rem] font-medium",
           });
+        dispatch(
+          modifyUsers([
+            ...users,
+            {
+              username: formik.values.username,
+              password: formik.values.password,
+              email: formik.values.email,
+              first_name: formik.values.firstName,
+              last_name: formik.values.lastName,
+              is_active: true,
+              role: formik.values.role,
+            },
+          ])
+        );
       })
       .catch((err) => {
         console.log(err);

@@ -1,58 +1,42 @@
+import React, { useState, useEffect } from "react";
 import { Card, Typography, Button } from "@material-tailwind/react";
 import { UserPlusIcon } from "@heroicons/react/24/solid";
 import modifyIcon from "../../assets/modifyIcon.png";
 import deleteIcon from "../../assets/deleteIcon.png";
 import ApprovalIcon from "../../assets/ApprovalIcon.png";
 import Filters from "../../assets/Filters.png";
-import { useState } from "react";
 import CreateRole from "./CreateRole";
-import ConfirmDelete from "../../ui/ConfirmDelete";
 import { useSelector } from "react-redux";
+import ConfirmDelete from "../../ui/ConfirmDelete";
+import { useDispatch } from "react-redux";
+import { modifyRoles } from "../AdminSlice";
+import axiosInstance from "../../Services/AxiosInstance";
 
 const TABLE_HEAD = ["ID", "Name", "More"];
 
-const TABLE_ROWS = [
-  // hedo bilama ma linkina m3a lback
-  {
-    id: "1",
-    name: "Admin",
-  },
-  {
-    id: "2",
-    name: " Purshasing department agen",
-  },
-  {
-    id: "3",
-    name: "Stockkeeper",
-  },
-  {
-    id: "4",
-    name: "Consumer",
-  },
-  {
-    id: "5",
-    name: "Responsable for the reporting structure",
-  },
-  {
-    id: "6",
-    name: "Director",
-  },
-];
-
-function RolesTbale() {
-  const admin = useSelector((state) => state.admin);
-  const searchQuery = admin.searchQuery;
-  /*const handleModify = (index) => {
-    // dk nzid fonctionnalite ta3ha hna ki nzid hedok les fenetres
-    console.log("Modify clicked for index", index);
-  };
-
-  const handleDelete = (index) => {
-    // hna tani
-    console.log("Delete clicked for index", index);
-  };*/
-
+function RolesTable() {
+  const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
+  const [openD, setOpenD] = useState(false);
+
+  const { searchQuery, roles } = useSelector((state) => state.admin);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await axiosInstance.get(
+          "http://127.0.0.1:8000/role/listcreate/"
+        );
+        dispatch(modifyRoles(response.data));
+      } catch (error) {
+        setError("An error occurred while fetching roles data.");
+        console.error("Error fetching roles data:", error);
+      }
+    };
+
+    fetchRoles();
+  }, [dispatch]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -61,8 +45,6 @@ function RolesTbale() {
   const handleClose = () => {
     setOpen(false);
   };
-
-  const [openD, setOpenD] = useState(false);
 
   const handleClickOpenD = () => {
     setOpenD(true);
@@ -75,10 +57,7 @@ function RolesTbale() {
   return (
     <main
       className="table-container m-4 h-full rounded-[11px]"
-      style={{
-        borderRadius: "20px !important",
-        backgroundColor: "#ffffff",
-      }}
+      style={{ borderRadius: "20px !important", backgroundColor: "#ffffff" }}
     >
       <Card
         className="h-full w-full overflow-auto  rounded-[11px]"
@@ -100,7 +79,6 @@ function RolesTbale() {
             <div
               style={{
                 backgroundColor: "#FFFFFF",
-
                 borderRadius: "10px",
                 padding: "8px",
                 marginLeft: "8px",
@@ -109,10 +87,7 @@ function RolesTbale() {
               }}
             >
               <div
-                style={{
-                  borderRadius: "10px",
-                  border: "1px solid #D0D3D9",
-                }}
+                style={{ borderRadius: "10px", border: "1px solid #D0D3D9" }}
               >
                 <Button
                   className="flex items-center gap-3 p-[8px]"
@@ -131,7 +106,6 @@ function RolesTbale() {
               style={{
                 backgroundColor: "#2185D5",
                 borderRadius: "10px",
-
                 marginLeft: "8px",
                 display: "flex",
                 alignItems: "center",
@@ -158,48 +132,61 @@ function RolesTbale() {
             </div>
           </div>
         </div>
+        {/* Error handling */}
+        {error && (
+          <div className="text-red-600 bg-red-200 p-4 mb-4 rounded-md">
+            Error: {error}
+          </div>
+        )}
+        {/* Table Content */}
         <table
           className="w-full ml-6 min-w-max table-auto text-left"
           style={{ fontSize: "14px", fontFamily: "Poppins", fontWeight: 100 }}
         >
-          <thead>
+          <thead className="relative z-[2]">
             <tr>
-              {TABLE_HEAD.map((head, index) => {
-                const isLast = index === TABLE_HEAD.length - 1;
-                return (
-                  <th
-                    key={head}
-                    className={`border-b border-blue-gray-100 bg-blue-gray-50 p-4 ${
-                      isLast ? "flex justify-end pr-28" : ""
-                    }`}
+              {TABLE_HEAD.map((head, index) => (
+                <th
+                  key={head}
+                  className={`border-b border-blue-gray-100 bg-blue-gray-50 p-4 ${
+                    index === 0 ? "w-[200px]" : ""
+                  }  ${
+                    index === TABLE_HEAD.length - 1
+                      ? "flex justify-end pr-28"
+                      : ""
+                  } bg-slate-100`}
+                >
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal leading-none opacity-70"
+                    style={{ fontFamily: "Poppins", fontWeight: 600 }}
                   >
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal leading-none opacity-70"
-                      style={{ fontFamily: "Poppins", fontWeight: 500 }}
-                    >
-                      {head}
-                    </Typography>
-                  </th>
-                );
-              })}
+                    {head}
+                  </Typography>
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            {TABLE_ROWS.filter(
-              (role) =>
-                role.id.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
-                role.name.toLowerCase().startsWith(searchQuery.toLowerCase())
-            ).map(({ id, name }, index) => {
-              const isLast = index === TABLE_ROWS.length - 1;
-              const classes = isLast
-                ? "p-4"
-                : "p-4 border-b border-blue-gray-50";
-
-              return (
-                <tr key={id}>
-                  <td className={`${classes} w-[200px]`}>
+            {roles
+              .filter(
+                (role) =>
+                  role.id
+                    .toString()
+                    .toLowerCase()
+                    .startsWith(searchQuery.toLowerCase()) ||
+                  role.name.toLowerCase().startsWith(searchQuery.toLowerCase())
+              )
+              .map((role, index) => (
+                <tr key={role.id}>
+                  <td
+                    className={`${
+                      index === roles.length - 1
+                        ? "p-4"
+                        : "p-4 border-b border-blue-gray-50"
+                    } w-[200px]`}
+                  >
                     <Typography
                       variant="small"
                       color="blue-gray"
@@ -209,11 +196,16 @@ function RolesTbale() {
                         color: "#48505E",
                       }}
                     >
-                      {id}
+                      {role.id}
                     </Typography>
                   </td>
-
-                  <td className={`${classes} w-[200px],mr-2`}>
+                  <td
+                    className={`${
+                      index === roles.length - 1
+                        ? "p-4"
+                        : "p-4 border-b border-blue-gray-50"
+                    } w-[200px]`}
+                  >
                     <Typography
                       variant="small"
                       color="blue-gray"
@@ -224,11 +216,16 @@ function RolesTbale() {
                         color: "#48505E",
                       }}
                     >
-                      {name}
+                      {role.name}
                     </Typography>
                   </td>
-
-                  <td className={classes}>
+                  <td
+                    className={`${
+                      index === roles.length - 1
+                        ? "p-4"
+                        : "p-4 border-b border-blue-gray-50"
+                    }`}
+                  >
                     <div className="flex justify-end pr-10">
                       <div
                         className="bg-white border border-blue-500 rounded-[6px] w-10 h-10 flex items-center justify-center mr-[4px]"
@@ -250,7 +247,6 @@ function RolesTbale() {
                           className="h-5 w-5"
                         />
                       </button>
-
                       <ConfirmDelete
                         open={openD}
                         handleClose={handleCloseD}
@@ -259,10 +255,7 @@ function RolesTbale() {
                       >
                         <button
                           className="bg-white border border-blue-500 rounded-[6px] w-10 h-10 flex items-center justify-center "
-                          style={{
-                            borderColor: "#D0D3D9",
-                            marginLeft: "3px",
-                          }}
+                          style={{ borderColor: "#D0D3D9", marginLeft: "3px" }}
                           onClick={handleClickOpenD}
                         >
                           <img
@@ -275,8 +268,7 @@ function RolesTbale() {
                     </div>
                   </td>
                 </tr>
-              );
-            })}
+              ))}
           </tbody>
         </table>
       </Card>
@@ -284,4 +276,4 @@ function RolesTbale() {
   );
 }
 
-export default RolesTbale;
+export default RolesTable;

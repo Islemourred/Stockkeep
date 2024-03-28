@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import { Card, Typography, Button } from "@material-tailwind/react";
 import { UserPlusIcon } from "@heroicons/react/24/solid";
 import MyToggle from "../../ui/MyToggle";
@@ -5,57 +6,28 @@ import modifyIcon from "../../assets/modifyIcon.png";
 import deleteIcon from "../../assets/deleteIcon.png";
 import Filters from "../../assets/Filters.png";
 import CreateConsumer from "./CreateConsumer";
-import { useState } from "react";
-import ConfirmDelete from "../../ui/ConfirmDelete";
 import { useSelector } from "react-redux";
+import ConfirmDelete from "../../ui/ConfirmDelete";
+import axiosInstance from "../../Services/AxiosInstance";
+import { useDispatch } from "react-redux";
+import { modifyConsumers } from "../AdminSlice";
 
 const TABLE_HEAD = [
-  "First Name",
-  "Last Name",
-  "Email",
-  "Structure",
-  "Activity",
-  "More",
+  { name: "Username", width: "160px" },
+  { name: "First Name", width: "160px" },
+  { name: "Last Name", width: "160px" },
+  { name: "Email", width: "200px" },
+  { name: "Structure", width: "170px" },
+  { name: "Activity" },
+  { name: "More" },
 ];
 
-const TABLE_ROWS = [
-  // hedo bilama ma linkina m3a lback
-  {
-    name: "Fetitah ",
-    lastName: "Rachida",
-    email: "r.fetitah@esi-sba.dz",
-    role: "CP",
-    activity: true,
-  },
-  {
-    name: "Aced",
-    lastName: "Mohammed",
-    email: "mr.aced@esi-sba.dz",
-    role: "CS",
-    activity: false,
-  },
-  {
-    name: "Benslimane",
-    lastName: "Mohammed",
-    email: "s.benslimane@esi-sba.dz",
-    role: "DG",
-    activity: true,
-  },
-];
-
-function ConsumersTable() {
-  const admin = useSelector((state) => state.admin);
-  const searchQuery = admin.searchQuery;
-  /*const handleModify = (index) => {
-    // dk nzid fonctionnalite ta3ha hna ki nzid hedok les fenetres
-    console.log("Modify clicked for index", index);
-  };
-
-  const handleDelete = (index) => {
-    // hna tani
-    console.log("Delete clicked for index", index);
-  };*/
+function Consumers() {
   const [open, setOpen] = useState(false);
+  const [openD, setOpenD] = useState(false);
+  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  const { searchQuery, consumers } = useSelector((state) => state.admin);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -65,8 +37,6 @@ function ConsumersTable() {
     setOpen(false);
   };
 
-  const [openD, setOpenD] = useState(false);
-
   const handleClickOpenD = () => {
     setOpenD(true);
   };
@@ -74,13 +44,52 @@ function ConsumersTable() {
   const handleCloseD = () => {
     setOpenD(false);
   };
+
+  useEffect(() => {
+    async function fetchConsumers() {
+      try {
+        const response = await axiosInstance.get(
+          "http://127.0.0.1:8000/consom/listcreate/"
+        );
+        dispatch(modifyConsumers(response.data));
+      } catch (error) {
+        setError("An error occurred while fetching consumer data.");
+        console.error("Error fetching consumer data:", error);
+      }
+    }
+
+    fetchConsumers();
+  }, [dispatch]);
+
+  const handleToggle = async (consumerId, newStatus) => {
+    // Send PATCH request to update activity status of the consumer
+    await axiosInstance
+      .patch(`http://127.0.0.1:8000/user/rud/${consumerId}/`, {
+        is_active: newStatus,
+      })
+      .then((response) => {
+        // Update local state with new activity status
+        dispatch(
+          modifyConsumers((prevConsumers) => {
+            const updatedConsumers = prevConsumers.map((consumer) => {
+              if (consumer.id === consumerId) {
+                return { ...consumer, is_active: newStatus };
+              }
+              return consumer;
+            });
+            return updatedConsumers;
+          })
+        );
+      })
+      .catch((error) => {
+        console.error("Error updating user activity status:", error);
+      });
+  };
+
   return (
     <main
       className="table-container m-4 h-full rounded-[11px]"
-      style={{
-        borderRadius: "20px !important",
-        backgroundColor: "#ffffff",
-      }}
+      style={{ borderRadius: "20px !important", backgroundColor: "#ffffff" }}
     >
       <Card
         className="h-full w-full overflow-auto rounded-[11px]"
@@ -102,7 +111,6 @@ function ConsumersTable() {
             <div
               style={{
                 backgroundColor: "#FFFFFF",
-
                 borderRadius: "10px",
                 padding: "8px",
                 marginLeft: "8px",
@@ -111,10 +119,7 @@ function ConsumersTable() {
               }}
             >
               <div
-                style={{
-                  borderRadius: "10px",
-                  border: "1px solid #D0D3D9",
-                }}
+                style={{ borderRadius: "10px", border: "1px solid #D0D3D9" }}
               >
                 <Button
                   className="flex items-center gap-3 p-[8px]"
@@ -133,7 +138,6 @@ function ConsumersTable() {
               style={{
                 backgroundColor: "#2185D5",
                 borderRadius: "10px",
-
                 marginLeft: "8px",
                 display: "flex",
                 alignItems: "center",
@@ -160,53 +164,63 @@ function ConsumersTable() {
             </div>
           </div>
         </div>
+        {/* Error handling */}
+        {error && (
+          <div className="text-red-600 bg-red-200 p-4 mb-4 rounded-md">
+            Error: {error}
+          </div>
+        )}
+        {/* Table Content */}
         <table
-          className="w-full ml-6 min-w-max table-auto text-left"
+          className="w-full ml-6 min-w-max table-auto text-left overflow-auto inline-block
+          max-h-[59vh]"
           style={{ fontSize: "14px", fontFamily: "Poppins", fontWeight: 100 }}
         >
-          <thead>
+          <thead className="relative z-[2]">
             <tr>
               {TABLE_HEAD.map((head) => (
                 <th
                   key={head}
-                  className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
+                  className={`border-b border-blue-gray-100 bg-blue-gray-50 p-4 sticky top-0 ${
+                    head.width ? `w-[${head.width}]` : ""
+                  }
+                  bg-slate-100`}
                 >
                   <Typography
                     variant="small"
                     color="blue-gray"
                     className="font-normal leading-none opacity-70"
-                    style={{ fontFamily: "Poppins", fontWeight: 500 }}
+                    style={{ fontFamily: "Poppins", fontWeight: 600 }}
                   >
-                    {head}
+                    {head.name}
                   </Typography>
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {TABLE_ROWS.filter(
-              (consumer) =>
-                consumer.name
-                  .toLowerCase()
-                  .startsWith(searchQuery.toLowerCase()) ||
-                consumer.lastName
-                  .toLowerCase()
-                  .startsWith(searchQuery.toLowerCase()) ||
-                consumer.email
-                  .toLowerCase()
-                  .startsWith(searchQuery.toLowerCase()) ||
-                consumer.role
-                  .toLowerCase()
-                  .startsWith(searchQuery.toLowerCase())
-            ).map(({ name, lastName, email, role, activity }, index) => {
-              const isLast = index === TABLE_ROWS.length - 1;
-              const classes = isLast
-                ? "p-4"
-                : "p-4 border-b border-blue-gray-50";
-
-              return (
-                <tr key={name}>
-                  <td className={`${classes} w-[160px]`}>
+            {consumers
+              .filter(
+                (consumer) =>
+                  consumer.username
+                    .toLowerCase()
+                    .startsWith(searchQuery.toLowerCase()) ||
+                  consumer.first_name
+                    .toLowerCase()
+                    .startsWith(searchQuery.toLowerCase()) ||
+                  consumer.email
+                    .toLowerCase()
+                    .startsWith(searchQuery.toLowerCase()) ||
+                  consumer.last_name
+                    .toLowerCase()
+                    .startsWith(searchQuery.toLowerCase()) ||
+                  consumer.structure
+                    .toLowerCase()
+                    .startsWith(searchQuery.toLowerCase())
+              )
+              .map((consumer) => (
+                <tr key={consumer.id}>
+                  <td className="p-4 w-[160px]">
                     <Typography
                       variant="small"
                       color="blue-gray"
@@ -216,38 +230,23 @@ function ConsumersTable() {
                         color: "#48505E",
                       }}
                     >
-                      {name}
+                      {consumer.username}
                     </Typography>
                   </td>
-                  <td className={`${classes} w-[160px]`}>
+                  <td className="p-4 w-[160px]">
                     <Typography
                       variant="small"
                       color="blue-gray"
-                      className="font-normal"
                       style={{
                         fontFamily: "Poppins",
                         fontWeight: 500,
                         color: "#48505E",
                       }}
                     >
-                      {lastName}
+                      {consumer.first_name}
                     </Typography>
                   </td>
-                  <td className={`${classes} w-[200px],mr-2`}>
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
-                      style={{
-                        fontFamily: "Poppins",
-                        fontWeight: 500,
-                        color: "#48505E",
-                      }}
-                    >
-                      {email}
-                    </Typography>
-                  </td>
-                  <td className={`${classes} w-[170px]`}>
+                  <td className="p-4 w-[160px]">
                     <Typography
                       variant="small"
                       color="blue-gray"
@@ -258,13 +257,46 @@ function ConsumersTable() {
                         color: "#48505E",
                       }}
                     >
-                      {role}
+                      {consumer.last_name}
                     </Typography>
                   </td>
-                  <td className={`${classes} `}>
-                    <MyToggle enabled={activity} />
+                  <td className="p-4 w-[200px]">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                      style={{
+                        fontFamily: "Poppins",
+                        fontWeight: 500,
+                        color: "#48505E",
+                      }}
+                    >
+                      {consumer.email}
+                    </Typography>
                   </td>
-                  <td className={classes}>
+                  <td className="p-4  w-[170px]">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                      style={{
+                        fontFamily: "Poppins",
+                        fontWeight: 500,
+                        color: "#48505E",
+                      }}
+                    >
+                      {consumer.structure}
+                    </Typography>
+                  </td>
+                  <td className="p-4">
+                    <MyToggle
+                      enabled={consumer.is_active}
+                      onToggle={(newStatus) =>
+                        handleToggle(consumer.id, newStatus)
+                      }
+                    />
+                  </td>
+                  <td className="p-4">
                     <div className="flex justify-start">
                       <button
                         className="bg-white border border-blue-500 rounded-[6px] w-10 h-10 flex items-center justify-center mr-[1px]"
@@ -276,7 +308,6 @@ function ConsumersTable() {
                           className="h-5 w-5"
                         />
                       </button>
-
                       <ConfirmDelete
                         open={openD}
                         handleClose={handleCloseD}
@@ -285,10 +316,7 @@ function ConsumersTable() {
                       >
                         <button
                           className="bg-white border border-blue-500 rounded-[6px] w-10 h-10 flex items-center justify-center "
-                          style={{
-                            borderColor: "#D0D3D9",
-                            marginLeft: "3px",
-                          }}
+                          style={{ borderColor: "#D0D3D9", marginLeft: "3px" }}
                           onClick={handleClickOpenD}
                         >
                           <img
@@ -301,8 +329,7 @@ function ConsumersTable() {
                     </div>
                   </td>
                 </tr>
-              );
-            })}
+              ))}
           </tbody>
         </table>
       </Card>
@@ -310,4 +337,4 @@ function ConsumersTable() {
   );
 }
 
-export default ConsumersTable;
+export default Consumers;

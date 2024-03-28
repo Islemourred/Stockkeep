@@ -8,13 +8,18 @@ import Input from "../../ui/Input";
 import axiosInstance from "../../Services/AxiosInstance";
 import { useFormik } from "formik";
 import toast, { Toaster } from "react-hot-toast";
-import { Password } from "@mui/icons-material";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { modifyConsumers } from "../AdminSlice";
 
 let structures = [];
 function CreateConsumer({ open, handleClose, setOpen, children }) {
   /*const handleClickOpen = () => {
     setOpen(true);
   };*/
+  const admin = useSelector((state) => state.admin);
+  const dispatch = useDispatch();
+  const consumers = admin.consumers;
   useEffect(() => {
     axiosInstance.get("/structure/listcreate/").then((res) => {
       structures = res.data;
@@ -99,6 +104,20 @@ function CreateConsumer({ open, handleClose, setOpen, children }) {
           toast.success("Consumer added successfully", {
             className: "font-poppins text-[1.3rem] font-medium",
           });
+        dispatch(
+          modifyConsumers([
+            ...consumers,
+            {
+              username: formik.values.username,
+              password: formik.values.password,
+              email: formik.values.email,
+              first_name: formik.values.firstName,
+              last_name: formik.values.lastName,
+              is_active: true,
+              structure: formik.values.structure,
+            },
+          ])
+        );
       })
       .catch((err) => {
         console.log(err);

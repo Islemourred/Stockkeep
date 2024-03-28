@@ -7,11 +7,17 @@ import Input from "../../ui/Input";
 import { useFormik } from "formik";
 import toast, { Toaster } from "react-hot-toast";
 import axiosInstance from "../../Services/AxiosInstance";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { modifyRoles } from "../AdminSlice";
 
 function CreateRole({ open, handleClose, setOpen, children }) {
   /*const handleClickOpen = () => {
     setOpen(true);
   };*/
+
+  const { roles } = useSelector((state) => state.admin);
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -42,6 +48,14 @@ function CreateRole({ open, handleClose, setOpen, children }) {
           toast.success("Role added successfully", {
             className: "font-poppins text-[1.3rem] font-medium",
           });
+        dispatch(
+          modifyRoles([
+            ...roles,
+            {
+              name: formik.values.name,
+            },
+          ])
+        );
       })
       .catch((err) => {
         console.log(err);

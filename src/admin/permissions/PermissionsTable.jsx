@@ -1,66 +1,42 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Card, Typography, Button } from "@material-tailwind/react";
 import { UserPlusIcon } from "@heroicons/react/24/solid";
 import modifyIcon from "../../assets/modifyIcon.png";
 import deleteIcon from "../../assets/deleteIcon.png";
-
 import Filters from "../../assets/Filters.png";
-import { useState } from "react";
 import CreatePermission from "./CreatePermissions";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { modifyPermissions } from "../AdminSlice";
+import axiosInstance from "../../Services/AxiosInstance";
 
 const TABLE_HEAD = ["ID", "Permission", "More"];
 
-const TABLE_ROWS = [
-  // hedo bilama ma linkina m3a lback
-  {
-    id: "1",
-    name: "Add/ Modify/ Delete/ View a chapter",
-  },
-  {
-    id: "2",
-    name: "Add/ Modify/ Delete/ View an article",
-  },
-  {
-    id: "3",
-    name: "Assign/ Unasign a role to account",
-  },
-  {
-    id: "4",
-    name: "Add/ Modify/ Delete/ Consult a spplier",
-  },
-  {
-    id: "5",
-    name: "Add/ Modify/ Delete an account",
-  },
-  {
-    id: "6",
-    name: "Add/ Modify/ Delete/ View/ Print an external purshase order",
-  },
-  {
-    id: "7",
-    name: "Add/ Modify/ Delete/ View a product",
-  },
-  {
-    id: "8",
-    name: "View statistics",
-  },
-];
-
 function PermissionsTable() {
-  const admin = useSelector((state) => state.admin);
-  const searchQuery = admin.searchQuery;
-  /*const handleModify = (index) => {
-    // dk nzid fonctionnalite ta3ha hna ki nzid hedok les fenetres
-    console.log("Modify clicked for index", index);
-  };
-
-  const handleDelete = (index) => {
-    // hna tani
-    console.log("Delete clicked for index", index);
-  };*/
-
+  const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
+  const [openD, setOpenD] = useState(false);
+
+  const { searchQuery, permissions } = useSelector((state) => state.admin);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/role/listcreatep/"
+        );
+        dispatch(modifyPermissions(response.data));
+      } catch (error) {
+        setError("An error occurred while fetching permissions data.");
+        console.error("Error fetching permissions data:", error);
+      }
+    };
+
+    fetchPermissions();
+  }, [dispatch]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -69,8 +45,6 @@ function PermissionsTable() {
   const handleClose = () => {
     setOpen(false);
   };
-
-  const [openD, setOpenD] = useState(false);
 
   const handleClickOpenD = () => {
     setOpenD(true);
@@ -83,10 +57,7 @@ function PermissionsTable() {
   return (
     <main
       className="table-container m-4 h-full rounded-[11px]"
-      style={{
-        borderRadius: "20px !important",
-        backgroundColor: "#ffffff",
-      }}
+      style={{ borderRadius: "20px !important", backgroundColor: "#ffffff" }}
     >
       <Card
         className="h-full w-full overflow-auto rounded-[11px]"
@@ -108,7 +79,6 @@ function PermissionsTable() {
             <div
               style={{
                 backgroundColor: "#FFFFFF",
-
                 borderRadius: "10px",
                 padding: "8px",
                 marginLeft: "8px",
@@ -117,10 +87,7 @@ function PermissionsTable() {
               }}
             >
               <div
-                style={{
-                  borderRadius: "10px",
-                  border: "1px solid #D0D3D9",
-                }}
+                style={{ borderRadius: "10px", border: "1px solid #D0D3D9" }}
               >
                 <Button
                   className="flex items-center gap-3 p-[8px]"
@@ -139,7 +106,6 @@ function PermissionsTable() {
               style={{
                 backgroundColor: "#2185D5",
                 borderRadius: "10px",
-
                 marginLeft: "8px",
                 display: "flex",
                 alignItems: "center",
@@ -166,57 +132,61 @@ function PermissionsTable() {
             </div>
           </div>
         </div>
+        {/* Error handling */}
+        {error && (
+          <div className="text-red-600 bg-red-200 p-4 mb-4 rounded-md">
+            Error: {error}
+          </div>
+        )}
+        {/* Table Content */}
         <table
           className="w-full ml-6 min-w-max table-auto text-left"
           style={{ fontSize: "14px", fontFamily: "Poppins", fontWeight: 100 }}
         >
           <thead>
             <tr>
-              {TABLE_HEAD.map((head, index) => {
-                const isLast = index === TABLE_HEAD.length - 1;
-                return (
-                  <th
-                    key={head}
-                    className={`border-b border-blue-gray-100 bg-blue-gray-50 p-4 ${
-                      isLast ? "flex justify-end pr-20" : ""
-                    }`}
+              {TABLE_HEAD.map((head, index) => (
+                <th
+                  key={head}
+                  className={`border-b border-blue-gray-100 bg-blue-gray-50 p-4 ${
+                    index === TABLE_HEAD.length - 1
+                      ? "flex justify-end pr-36"
+                      : ""
+                  }${index === 1 ? "pl-36" : ""} bg-slate-100`}
+                >
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal leading-none opacity-70"
+                    style={{ fontFamily: "Poppins", fontWeight: 600 }}
                   >
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal leading-none opacity-70"
-                      style={{ fontFamily: "Poppins", fontWeight: 500 }}
-                    >
-                      {head}
-                    </Typography>
-                  </th>
-                );
-              })}
+                    {head}
+                  </Typography>
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            {TABLE_ROWS.filter(
-              (permission) =>
-                permission.id
-                  .toLowerCase()
-                  .startsWith(searchQuery.toLowerCase()) ||
-                permission.name
-                  .toLowerCase()
-                  .split("/")
-                  .some(
-                    (per) =>
-                      per.startsWith(" " + searchQuery) ||
-                      per.startsWith(searchQuery)
-                  )
-            ).map(({ id, name }, index) => {
-              const isLast = index === TABLE_ROWS.length - 1;
-              const classes = isLast
-                ? "p-4"
-                : "p-4 border-b border-blue-gray-50";
-
-              return (
-                <tr key={id}>
-                  <td className={`${classes} w-[200px]`}>
+            {permissions
+              .filter(
+                (permission) =>
+                  permission.id
+                    .toString()
+                    .toLowerCase()
+                    .startsWith(searchQuery.toLowerCase()) ||
+                  permission.name
+                    .toLowerCase()
+                    .startsWith(searchQuery.toLowerCase())
+              )
+              .map((permission, index) => (
+                <tr key={index}>
+                  <td
+                    className={`${
+                      index === permissions.length - 1
+                        ? "p-4"
+                        : "p-4 border-b border-blue-gray-50"
+                    } w-[200px]`}
+                  >
                     <Typography
                       variant="small"
                       color="blue-gray"
@@ -226,11 +196,16 @@ function PermissionsTable() {
                         color: "#48505E",
                       }}
                     >
-                      {id}
+                      {permission.id.toString()} {/* Convert id to string */}
                     </Typography>
                   </td>
-
-                  <td className={`${classes} w-[200px],mr-2`}>
+                  <td
+                    className={`${
+                      index === permissions.length - 1
+                        ? "p-4"
+                        : "p-4 border-b border-blue-gray-50"
+                    } w-[200px] bg-slate-100`}
+                  >
                     <Typography
                       variant="small"
                       color="blue-gray"
@@ -241,11 +216,16 @@ function PermissionsTable() {
                         color: "#48505E",
                       }}
                     >
-                      {name}
+                      {permission.auth_permission}
                     </Typography>
                   </td>
-
-                  <td className={classes}>
+                  <td
+                    className={`${
+                      index === permissions.length - 1
+                        ? "p-4"
+                        : "p-4 border-b border-blue-gray-50"
+                    }`}
+                  >
                     <div className="flex justify-end pr-10">
                       <button
                         className="bg-white border border-blue-500 rounded-[6px] w-10 h-10 flex items-center justify-center mr-[1px]"
@@ -257,19 +237,15 @@ function PermissionsTable() {
                           className="h-5 w-5"
                         />
                       </button>
-
                       <ConfirmDelete
                         open={openD}
                         handleClose={handleCloseD}
                         setOpen={setOpenD}
-                        concern="user"
+                        concern="permission"
                       >
                         <button
-                          className="bg-white border border-blue-500 rounded-[6px] w-10 h-10 flex items-center justify-center "
-                          style={{
-                            borderColor: "#D0D3D9",
-                            marginLeft: "3px",
-                          }}
+                          className="bg-white border border-blue-500 rounded-[6px] w-10 h-10 flex items-center justify-center"
+                          style={{ borderColor: "#D0D3D9", marginLeft: "3px" }}
                           onClick={handleClickOpenD}
                         >
                           <img
@@ -282,8 +258,7 @@ function PermissionsTable() {
                     </div>
                   </td>
                 </tr>
-              );
-            })}
+              ))}
           </tbody>
         </table>
       </Card>
