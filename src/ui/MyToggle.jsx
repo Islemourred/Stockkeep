@@ -4,7 +4,7 @@ import { Switch } from '@headlessui/react';
 function MyToggle({ enabled, onToggle }) {
   const handleChange = () => {
     // Call the onToggle function passed from the parent component
-    // to update the user's activity status
+    // to update the consumer's activity status
     onToggle(!enabled);
   };
 

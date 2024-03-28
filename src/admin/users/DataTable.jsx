@@ -11,6 +11,7 @@ import CreateUser from "./CreateUser";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 
 const TABLE_HEAD = [
+  "User Name",
   "First Name",
   "Last Name",
   "Email",
@@ -153,53 +154,61 @@ function Users() {
               ))}
             </tr>
           </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td className="p-4 w-[160px]">
-                  <Typography variant="small" color="blue-gray" style={{ fontFamily: "Poppins", fontWeight: 500, color: "#48505E" }}>
-                    {user.first_name}
-                  </Typography>
-                </td>
-                <td className="p-4 w-[160px]">
-                  <Typography variant="small" color="blue-gray" className="font-normal" style={{ fontFamily: "Poppins", fontWeight: 500, color: "#48505E" }}>
-                    {user.last_name}
-                  </Typography>
-                </td>
-                <td className="p-4 w-[200px]">
-                  <Typography variant="small" color="blue-gray" className="font-normal" style={{ fontFamily: "Poppins", fontWeight: 500, color: "#48505E" }}>
-                    {user.email}
-                  </Typography>
-                </td>
-                <td className="p-4 w-[170px]">
-                  <RoleCombobox
-                    userId={user.id}
-                    currentRole={user.role}
-                    roles={roles}
-                    onRoleChange={(newRole) => handleRoleChange(user.id, newRole)}
-                  />
-                </td>
-                <td className="p-4">
-              <MyToggle enabled={user.is_active} onToggle={(newStatus) => handleToggle(user.id, newStatus)} />
-            </td>
-<td className="p-4">
-  <div className="flex justify-start">
-    <button className="bg-white border border-blue-500 rounded-[6px] w-10 h-10 flex items-center justify-center mr-[1px]" style={{ borderColor: "#D0D3D9" }}>
-      <img src={modifyIcon} alt="Modify" className="h-5 w-5" />
-    </button>
-    <ConfirmDelete open={openD} handleClose={handleCloseD} setOpen={setOpenD} concern="user">
-      <button className="bg-white border border-blue-500 rounded-[6px] w-10 h-10 flex items-center justify-center" style={{ borderColor: "#D0D3D9", marginLeft: "3px" }} onClick={handleClickOpenD}>
-        <img src={deleteIcon} alt="Delete" className="h-5 w-5" />
-      </button>
-    </ConfirmDelete>
-  </div>
-</td>
-</tr>
-))}
+           <tbody>
+  {users.map((user) => (
+    user.role !== 'consumer' && ( // Filtrer les utilisateurs ayant le rôle "consumer"
+      <tr key={user.id}>
+        <td className="p-4 w-[160px]">
+          <Typography variant="small" color="blue-gray" style={{ fontFamily: "Poppins", fontWeight: 500, color: "#48505E" }}>
+            {user.username}
+          </Typography>
+        </td>
+        <td className="p-4 w-[160px]">
+          <Typography variant="small" color="blue-gray" style={{ fontFamily: "Poppins", fontWeight: 500, color: "#48505E" }}>
+            {user.first_name}
+          </Typography>
+        </td>
+        <td className="p-4 w-[160px]">
+          <Typography variant="small" color="blue-gray" className="font-normal" style={{ fontFamily: "Poppins", fontWeight: 500, color: "#48505E" }}>
+            {user.last_name}
+          </Typography>
+        </td>
+        <td className="p-4 w-[200px]">
+          <Typography variant="small" color="blue-gray" className="font-normal" style={{ fontFamily: "Poppins", fontWeight: 500, color: "#48505E" }}>
+            {user.email}
+          </Typography>
+        </td>
+        <td className="p-4 w-[170px]">
+          <RoleCombobox
+            userId={user.id}
+            currentRole={user.role}
+            roles={roles.filter(role => role !== 'consumer')} // Filtrer le rôle "consumer"
+            onRoleChange={(newRole) => handleRoleChange(user.id, newRole)}
+          />
+        </td>
+        <td className="p-4">
+          <MyToggle enabled={user.is_active} onToggle={(newStatus) => handleToggle(user.id, newStatus)} />
+        </td>
+        <td className="p-4">
+          <div className="flex justify-start">
+            <button className="bg-white border border-blue-500 rounded-[6px] w-10 h-10 flex items-center justify-center mr-[1px]" style={{ borderColor: "#D0D3D9" }}>
+              <img src={modifyIcon} alt="Modify" className="h-5 w-5" />
+            </button>
+            <ConfirmDelete open={openD} handleClose={handleCloseD} setOpen={setOpenD} concern="user">
+              <button className="bg-white border border-blue-500 rounded-[6px] w-10 h-10 flex items-center justify-center" style={{ borderColor: "#D0D3D9", marginLeft: "3px" }} onClick={handleClickOpenD}>
+                <img src={deleteIcon} alt="Delete" className="h-5 w-5" />
+              </button>
+            </ConfirmDelete>
+          </div>
+        </td>
+      </tr>
+    )
+  ))}
 </tbody>
-</table>
-</Card>
-</main>
+
+      </table>
+    </Card>
+  </main>
 );
 }
 
